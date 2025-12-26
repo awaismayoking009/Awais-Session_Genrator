@@ -2,95 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AWAIS_MAYO-MD Pair</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWAIS-MAYO-MD | CYBER SECURITY</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
-      color: #ffffff;
+      background-color: #000;
+      color: #00ff41;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    h1 {
-      color: #00ff88;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-    input, button {
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      margin: 10px 0;
+    #matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 400px;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
     }
+    .container {
+      background: rgba(0, 20, 0, 0.9);
+      border: 2px solid #00ff41;
+      box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      from { box-shadow: 0 0 15px #00ff41; }
+      to { box-shadow: 0 0 30px #00ff41; }
+    }
+    h1 { font-size: 24px; text-shadow: 2px 2px #000; letter-spacing: 2px; }
+    .hacking-text { font-size: 14px; margin-bottom: 20px; color: #fff; }
     input {
-      background: #222;
-      color: #fff;
-      border: 1px solid #444;
+      width: 90%;
+      padding: 12px;
+      background: #000;
+      border: 1px solid #00ff41;
+      color: #00ff41;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      text-align: center;
     }
-    button {
-      background-color: #00ff88;
+    .btn {
+      width: 96%;
+      padding: 12px;
+      background: #00ff41;
       color: #000;
+      border: none;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+      display: block;
+      text-decoration: none;
     }
-    button:hover {
-      background-color: #00cc6e;
+    .btn:hover { background: #fff; transform: scale(1.05); }
+    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .social-btn {
+      padding: 10px;
+      font-size: 12px;
+      border: 1px solid #00ff41;
+      color: #00ff41;
+      text-decoration: none;
+      border-radius: 5px;
     }
-    .output {
-      margin-top: 30px;
-      background: #1e1e1e;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      word-break: break-all;
-      border: 1px solid #333;
-    }
+    .social-btn:hover { background: rgba(0, 255, 65, 0.2); }
+    #result { margin-top: 20px; padding: 15px; border: 1px dashed #00ff41; font-weight: bold; display: none; }
   </style>
 </head>
 <body>
+  <canvas id="matrix-bg"></canvas>
+  <div class="container">
+    <h1>☣️ AWAIS-MAYO-MD ☣️</h1>
+    <p class="hacking-text">SYSTEM SECURED | TYPE YOUR NUMBER</p>
+    
+    <input type="text" id="number" placeholder="923295533214">
+    <button class="btn" onclick="getCode()">GENERATE PAIRING CODE</button>
+    <div id="result"></div>
 
-  <h1>AWAIS_MAYO-MD Pairing</h1>
+    <p style="font-size: 12px; margin-top: 15px; color: #aaa;">HOW TO CONNECT:<br>Go to Linked Devices > Link with Phone Number</p>
 
-  <input type="text" id="number" placeholder="Enter WhatsApp Number (e.g., 923295533214)" />
-  <button onclick="getCode()">Generate Pair Code</button>
-
-  <div id="result" class="output" style="display:none;"></div>
+    <div class="social-btns">
+      <a href="https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922" class="social-btn">WhatsApp Channel</a>
+      <a href="https://t.me/awaishacking009" class="social-btn">Telegram</a>
+      <a href="https://youtube.com/@awaismayohacker009" class="social-btn">YouTube</a>
+      <a href="https://wa.me/923295533214" class="social-btn">Admin Chat</a>
+    </div>
+  </div>
 
   <script>
+    // Matrix Background Animation
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const rainDrops = Array.from({ length: columns }).fill(1);
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff41';
+      ctx.font = fontSize + 'px monospace';
+      rainDrops.forEach((y, x) => {
+        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+        ctx.fillText(text, x * fontSize, y * fontSize);
+        if (y * fontSize > canvas.height && Math.random() > 0.975) rainDrops[x] = 0;
+        rainDrops[x]++;
+      });
+    }
+    setInterval(draw, 30);
+
     async function getCode() {
       const number = document.getElementById("number").value.trim();
       const resultBox = document.getElementById("result");
-
-      if (!number) {
-        alert("Please enter a valid number.");
-        return;
-      }
-
+      if (!number) { alert("ENTER NUMBER!"); return; }
       resultBox.style.display = 'block';
-      resultBox.textContent = "⏳ Generating code, please wait...";
-
+      resultBox.innerHTML = "📡 ACCESSING SERVER...";
       try {
         const res = await fetch(`/code?number=${encodeURIComponent(number)}`);
         const data = await res.json();
-
-        if (data.code) {
-          resultBox.textContent = `✅ Pairing Code: ${data.code}`;
-        } else if (data.error) {
-          resultBox.textContent = `❌ Error: ${data.error}`;
-        } else {
-          resultBox.textContent = "⚠️ Unknown response received.";
-        }
-      } catch (err) {
-        resultBox.textContent = `❌ Failed to get code: ${err.message}`;
-      }
+        if (data.code) { resultBox.innerHTML = `SUCCESS! CODE: <span style="color:#fff; font-size:20px;">${data.code}</span>`; }
+        else { resultBox.innerHTML = "❌ SYSTEM ERROR!"; }
+      } catch (err) { resultBox.innerHTML = "❌ CONNECTION FAILED!"; }
     }
   </script>
-
 </body>
 </html>
+
