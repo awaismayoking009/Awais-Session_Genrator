@@ -3,142 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AWAIS-MAYO-MD | CYBER SECURITY</title>
+  <title>AWAIS-MAYO-MD | SIGMA EDITION</title>
   <style>
-    body {
-      background-color: #000;
-      color: #00ff41;
-      font-family: 'Courier New', Courier, monospace;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    #matrix-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.3;
-    }
-    .container {
-      background: rgba(0, 20, 0, 0.9);
-      border: 2px solid #00ff41;
-      box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      max-width: 450px;
-      width: 90%;
-      animation: pulse 2s infinite alternate;
-    }
-    @keyframes pulse {
-      from { box-shadow: 0 0 15px #00ff41; }
-      to { box-shadow: 0 0 30px #00ff41; }
-    }
-    h1 { font-size: 24px; text-shadow: 2px 2px #000; letter-spacing: 2px; }
-    .hacking-text { font-size: 14px; margin-bottom: 20px; color: #fff; }
-    input {
-      width: 90%;
-      padding: 12px;
-      background: #000;
-      border: 1px solid #00ff41;
-      color: #00ff41;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    .btn {
-      width: 96%;
-      padding: 12px;
-      background: #00ff41;
-      color: #000;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      transition: 0.3s;
-      display: block;
-      text-decoration: none;
-    }
-    .btn:hover { background: #fff; transform: scale(1.05); }
-    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-    .social-btn {
-      padding: 10px;
-      font-size: 12px;
-      border: 1px solid #00ff41;
-      color: #00ff41;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .social-btn:hover { background: rgba(0, 255, 65, 0.2); }
-    #result { margin-top: 20px; padding: 15px; border: 1px dashed #00ff41; font-weight: bold; display: none; }
+    /* پہلا والا سارا ڈیزائن (Matrix background وغیرہ) یہاں موجود رہے گا */
+    body { background-color: #000; color: #00ff41; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
+    #matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
+    .container { background: rgba(0, 20, 0, 0.9); border: 2px solid #00ff41; box-shadow: 0 0 20px #00ff41; padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px; z-index: 1; }
+    .btn { width: 100%; padding: 12px; background: #00ff41; color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+    .social-btn { display: inline-block; margin: 5px; color: #00ff41; text-decoration: none; border: 1px solid #00ff41; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
   </style>
 </head>
 <body>
   <canvas id="matrix-bg"></canvas>
+
+  <audio id="sigma-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
   <div class="container">
     <h1>☣️ AWAIS-MAYO-MD ☣️</h1>
-    <p class="hacking-text">SYSTEM SECURED | TYPE YOUR NUMBER</p>
+    <p style="font-size: 12px; color: #fff;">SYSTEM STATUS: SECURED | MUSIC: ENABLED</p>
     
-    <input type="text" id="number" placeholder="923295533214">
+    <input type="text" id="number" placeholder="923295533214" style="width: 90%; padding: 10px; background: #000; border: 1px solid #00ff41; color: #00ff41; margin-bottom: 10px;">
+    
     <button class="btn" onclick="getCode()">GENERATE PAIRING CODE</button>
-    <div id="result"></div>
+    <div id="result" style="margin-top: 15px; font-weight: bold;"></div>
 
-    <p style="font-size: 12px; margin-top: 15px; color: #aaa;">HOW TO CONNECT:<br>Go to Linked Devices > Link with Phone Number</p>
-
-    <div class="social-btns">
-      <a href="https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922" class="social-btn">WhatsApp Channel</a>
+    <div style="margin-top: 20px;">
+      <a href="https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922" class="social-btn">WhatsApp</a>
       <a href="https://t.me/awaishacking009" class="social-btn">Telegram</a>
-      <a href="https://youtube.com/@awaismayohacker009" class="social-btn">YouTube</a>
-      <a href="https://wa.me/923295533214" class="social-btn">Admin Chat</a>
     </div>
   </div>
 
   <script>
-    // Matrix Background Animation
+    // پیج پر کلک کرتے ہی میوزک شروع کرنے کے لیے
+    document.body.addEventListener('click', function() {
+        var audio = document.getElementById('sigma-music');
+        audio.play();
+    }, { once: true });
+
+    // Matrix Animation (پرانا والا کوڈ)
     const canvas = document.getElementById('matrix-bg');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const alphabet = "01"; const fontSize = 16; const columns = canvas.width / fontSize;
     const rainDrops = Array.from({ length: columns }).fill(1);
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ff41';
-      ctx.font = fontSize + 'px monospace';
-      rainDrops.forEach((y, x) => {
-        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-        ctx.fillText(text, x * fontSize, y * fontSize);
-        if (y * fontSize > canvas.height && Math.random() > 0.975) rainDrops[x] = 0;
-        rainDrops[x]++;
-      });
-    }
+    function draw() { ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#00ff41'; ctx.font = fontSize + 'px monospace'; rainDrops.forEach((y, x) => { const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length)); ctx.fillText(text, x * fontSize, y * fontSize); if (y * fontSize > canvas.height && Math.random() > 0.975) rainDrops[x] = 0; rainDrops[x]++; }); }
     setInterval(draw, 30);
 
     async function getCode() {
       const number = document.getElementById("number").value.trim();
       const resultBox = document.getElementById("result");
       if (!number) { alert("ENTER NUMBER!"); return; }
-      resultBox.style.display = 'block';
-      resultBox.innerHTML = "📡 ACCESSING SERVER...";
+      resultBox.innerHTML = "📡 CONNECTING...";
       try {
         const res = await fetch(`/code?number=${encodeURIComponent(number)}`);
         const data = await res.json();
-        if (data.code) { resultBox.innerHTML = `SUCCESS! CODE: <span style="color:#fff; font-size:20px;">${data.code}</span>`; }
-        else { resultBox.innerHTML = "❌ SYSTEM ERROR!"; }
-      } catch (err) { resultBox.innerHTML = "❌ CONNECTION FAILED!"; }
+        if (data.code) { resultBox.innerHTML = `CODE: <span style="color:#fff;">${data.code}</span>`; }
+        else { resultBox.innerHTML = "❌ ERROR!"; }
+      } catch (err) { resultBox.innerHTML = "❌ FAILED!"; }
     }
   </script>
 </body>
 </html>
-
