@@ -1,22 +1,17 @@
 const express = require('express');
 const path = require('path');
+const pair = require('./pair');
+
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-const pairCode = require('./pair');
+app.use(express.static(path.join(__dirname)));
+app.use('/code', pair);
 
-const PORT = process.env.PORT || 8001;
-__path = process.cwd();
-
-require('events').EventEmitter.defaultMaxListeners = 500;
-
-// Use pair.js under /code
-app.use('/code', pairCode);
-
-// Serve pair.html at root
-app.use('/', (req, res) => res.sendFile(__path + '/pair.html'));
-
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pair.html'));
 });
 
-module.exports = app;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
+});
