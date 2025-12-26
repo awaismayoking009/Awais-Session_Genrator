@@ -1,57 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AWAIS-MAYO-MD | SIGMA EDITION</title>
-  <style>
-    body { background-color: #000; color: #00ff41; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
-    #matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
-    .container { background: rgba(0, 20, 0, 0.9); border: 2px solid #00ff41; box-shadow: 0 0 20px #00ff41; padding: 30px; border-radius: 15px; text-align: center; width: 90%; max-width: 400px; z-index: 1; }
-    .btn { width: 100%; padding: 12px; background: #00ff41; color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWAIS-MAYO-MD</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+        .box { border: 2px solid #00ff41; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px #00ff41; background: rgba(0,20,0,0.8); }
+        input { padding: 10px; width: 80%; background: #000; border: 1px solid #00ff41; color: #0ff; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #00ff41; color: #000; border: none; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
-<body>
-  <canvas id="matrix-bg"></canvas>
+<body onclick="playMusic()">
+    <audio id="bg-music" loop>
+        <source src="https://files.catbox.moe/p8h56m.mp3" type="audio/mpeg">
+    </audio>
 
-  <audio id="sigma-music" loop>
-    <source src="https://files.catbox.moe/p8h56m.mp3" type="audio/mpeg">
-  </audio>
+    <div class="box">
+        <h2>☣️ AWAIS-MAYO-MD ☣️</h2>
+        <p>TAP ANYWHERE FOR SIGMA MUSIC</p>
+        <input type="text" id="num" placeholder="923295533214">
+        <br>
+        <button onclick="getPair()">GET CODE</button>
+        <div id="res" style="margin-top: 20px; font-size: 20px; color: #fff;"></div>
+    </div>
 
-  <div class="container">
-    <h1>☣️ AWAIS-MAYO-MD ☣️</h1>
-    <p style="font-size: 12px; color: #fff;">CLICK ANYWHERE TO ACTIVATE SIGMA MUSIC</p>
-    <input type="text" id="number" placeholder="923295533214" style="width: 90%; padding: 10px; background: #000; border: 1px solid #00ff41; color: #00ff41; margin-bottom: 10px;">
-    <button class="btn" onclick="getCode()">GENERATE PAIRING CODE</button>
-    <div id="result" style="margin-top: 15px; font-weight: bold;"></div>
-  </div>
+    <script>
+        function playMusic() { document.getElementById('bg-music').play(); }
 
-  <script>
-    // Click to Play Music
-    document.body.addEventListener('click', () => { document.getElementById('sigma-music').play(); }, { once: true });
-
-    // Matrix Background Animation
-    const canvas = document.getElementById('matrix-bg');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const alphabet = "01"; const fontSize = 16; const columns = canvas.width / fontSize;
-    const rainDrops = Array.from({ length: columns }).fill(1);
-    function draw() { ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#00ff41'; ctx.font = fontSize + 'px monospace'; rainDrops.forEach((y, x) => { const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length)); ctx.fillText(text, x * fontSize, y * fontSize); if (y * fontSize > canvas.height && Math.random() > 0.975) rainDrops[x] = 0; rainDrops[x]++; }); }
-    setInterval(draw, 30);
-
-    async function getCode() {
-      const number = document.getElementById("number").value.trim();
-      const resultBox = document.getElementById("result");
-      if (!number) { alert("ENTER NUMBER!"); return; }
-      resultBox.innerHTML = "📡 CONNECTING...";
-      try {
-        const res = await fetch(`/code?number=${encodeURIComponent(number)}`);
-        const data = await res.json();
-        if (data.code) { resultBox.innerHTML = `CODE: <span style="color:#fff; font-size:24px;">${data.code}</span>`; }
-        else { resultBox.innerHTML = "❌ SYSTEM ERROR!"; }
-      } catch (err) { resultBox.innerHTML = "❌ FAILED TO GET CODE!"; }
-    }
-  </script>
+        async function getPair() {
+            const num = document.getElementById("num").value;
+            const resBox = document.getElementById("res");
+            if(!num) return alert("Enter Number!");
+            resBox.innerText = "📡 CONNECTING...";
+            try {
+                const response = await fetch(`/code?number=${num}`);
+                const data = await response.json();
+                resBox.innerHTML = data.code ? `YOUR CODE: <br> <span style="font-size:30px;">${data.code}</span>` : "❌ ERROR";
+            } catch { resBox.innerText = "❌ FAILED"; }
+        }
+    </script>
 </body>
 </html>
 
