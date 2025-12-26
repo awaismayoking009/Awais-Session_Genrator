@@ -8,7 +8,8 @@ const {
     useMultiFileAuthState,
     delay,
     Browsers,
-    makeCacheableSignalKeyStore
+    makeCacheableSignalKeyStore,
+    isJidGroup // Fixed line 4
 } = require('@whiskeysockets/baileys');
 
 const router = express.Router();
@@ -25,12 +26,12 @@ router.get('/', async (req, res) => {
     const phoneNumber = (req.query.number || '').replace(/\D/g, '');
 
     if (!phoneNumber) {
-        return res.status(400).send({ error: "Please provide a valid phone number" });
+        return res.status(400).send({ error: "Invalid Number" });
     }
 
     async function createSocketSession() {
         const { state, saveCreds } = await useMultiFileAuthState(tempDir);
-        const logger = pino({ level: "fatal" }).child({ level: "fatal" });
+        const logger = pino({ level: "fatal" });
 
         const sock = makeWASocket({
             auth: {
@@ -38,90 +39,66 @@ router.get('/', async (req, res) => {
                 keys: makeCacheableSignalKeyStore(state.keys, logger)
             },
             printQRInTerminal: false,
-            generateHighQualityLinkPreview: true,
             logger,
-            syncFullHistory: false,
             browser: Browsers.macOS("Safari")
         });
 
         sock.ev.on('creds.update', saveCreds);
 
         sock.ev.on("connection.update", async (update) => {
-            const { connection, lastDisconnect } = update;
+            const { connection } = update;
+            // Fixed line 28 logic
+            const isGroup = update.id ? isJidGroup(update.id) : false;
 
             if (connection === "open") {
                 await delay(5000);
-
                 try {
                     const credsPath = path.join(tempDir, 'creds.json');
                     const sessionData = fs.readFileSync(credsPath, 'utf8');
                     const base64 = Buffer.from(sessionData).toString('base64');
-                    const sessionId = "AWAIS_MANO_CYBER_BTZ" + base64;
+                    const sessionId = "AWAIS-MAYO-MD~" + base64;
 
                     await sock.sendMessage(sock.user.id, { text: sessionId });
 
                     const successMsg = {
-                        text:
-                            `🚀 *AWAIS-MD Session Created!*\n\n` +
-                            `▸ *Never share* your session ID\n` +
-                            `▸ Join our WhatsApp Channel\n` +
-                            `▸ Report bugs on GitHub\n\n` +
-                            `_Powered by AWAIS-MD\n\n` +
-                            `🔗 *Useful Links:*\n` +
-                            `▸ GitHub: https://github.com/awaismayoking009/AWAIS_MANO_CYBER_BTZ\n` +
-                            `▸ https://whatsapp.com/channel/0029VbBGXs5HbFV5AM43wi22`,
+                        text: `🚀 *AWAIS-MAYO-MD SESSION CONNECTED!*\n\n` +
+                              `ID: \`${sessionId}\`\n\n` +
+                              `⚠️ *Do not share this ID.*\n\n` +
+                              `🔗 *JOIN LINKS:*\n` +
+                              `▸ YouTube: https://youtube.com/@awaismayohacker009\n` +
+                              `▸ WhatsApp: https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922\n` +
+                              `▸ Telegram: https://t.me/awaishacking009\n\n` +
+                              `*Powered by Awais Mayo Hacker*`,
                         contextInfo: {
-                            mentionedJid: [sock.user.id],
-                            forwardingScore: 1000,
-                            isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: "120363390235338421@newsletter",
-                                newsletterName: "AWAIS_MANO_CYBER_BTZ",
-                                serverMessageId: 143
+                            externalAdReply: {
+                                title: "SYSTEM SECURED BY AWAIS",
+                                body: "Session ID Generated Successfully",
+                                thumbnail: fs.readFileSync(path.join(__dirname, 'pair.html')), // Placeholder
+                                sourceUrl: "https://github.com/awaismayoking009/AWAIS_MANO_CYBER_BTZ"
                             }
                         }
                     };
-
                     await sock.sendMessage(sock.user.id, successMsg);
 
                 } catch (err) {
-                    console.error("❌ Session Error:", err.message);
-                    await sock.sendMessage(sock.user.id, {
-                        text: `⚠️ Error: ${err.message.includes('rate limit') ? 'Server is busy. Try later.' : err.message}`
-                    });
+                    console.error(err);
                 } finally {
-                    await delay(1000);
-                    await sock.ws.close();
+                    await delay(2000);
                     removeFolder(tempDir);
-                    console.log(`✅ ${sock.user.id} session completed`);
                     process.exit();
                 }
-
-            } else if (connection === "close" && lastDisconnect?.error?.output?.statusCode !== 401) {
-                console.log("🔁 Reconnecting...");
-                await delay(10);
-                createSocketSession();
             }
         });
 
         if (!sock.authState.creds.registered) {
             await delay(1500);
-            const pairingCode = await sock.requestPairingCode(phoneNumber, "EDITH123");
+            const pairingCode = await sock.requestPairingCode(phoneNumber);
             if (!res.headersSent) {
-                return res.send({ code: pairingCode });
+                res.send({ code: pairingCode });
             }
         }
     }
-
-    try {
-        await createSocketSession();
-    } catch (err) {
-        console.error("🚨 Fatal Error:", err.message);
-        removeFolder(tempDir);
-        if (!res.headersSent) {
-            res.status(500).send({ code: "Service Unavailable. Try again later." });
-        }
-    }
+    createSocketSession();
 });
 
 module.exports = router;
