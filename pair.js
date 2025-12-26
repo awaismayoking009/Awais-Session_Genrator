@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
                     const credsPath = path.join(tempDir, 'creds.json');
                     const sessionData = fs.readFileSync(credsPath, 'utf8');
                     const base64 = Buffer.from(sessionData).toString('base64');
-                    const sessionId = "ARSLAN-MD~" + base64;
+                    const sessionId = "AWAIS_MANO_CYBER_BTZ" + base64;
 
                     await sock.sendMessage(sock.user.id, { text: sessionId });
 
