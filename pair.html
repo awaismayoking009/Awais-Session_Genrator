@@ -3,41 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWAIS-MAYO-MD</title>
+    <title>AWAIS-MAYO-MD SESSION</title>
     <style>
-        body { background: #000; color: #00ff41; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .box { border: 2px solid #00ff41; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px #00ff41; background: rgba(0,20,0,0.8); }
-        input { padding: 10px; width: 80%; background: #000; border: 1px solid #00ff41; color: #0ff; margin-bottom: 10px; }
-        button { padding: 10px 20px; background: #00ff41; color: #000; border: none; cursor: pointer; font-weight: bold; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+        .container { border: 2px solid #00ff41; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px #00ff41; background: #050505; }
+        input { padding: 12px; width: 85%; background: transparent; border: 1px solid #00ff41; color: #fff; margin-bottom: 15px; border-radius: 5px; }
+        button { padding: 12px 25px; background: #00ff41; color: #000; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        #result { margin-top: 25px; font-size: 22px; color: #fff; }
     </style>
 </head>
 <body onclick="playMusic()">
-    <audio id="bg-music" loop>
+    <audio id="sigma-track" loop>
         <source src="https://files.catbox.moe/p8h56m.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="box">
+    <div class="container">
         <h2>☣️ AWAIS-MAYO-MD ☣️</h2>
-        <p>TAP ANYWHERE FOR SIGMA MUSIC</p>
+        <p>TAP ANYWHERE TO ACTIVATE MUSIC</p>
         <input type="text" id="num" placeholder="923295533214">
         <br>
-        <button onclick="getPair()">GET CODE</button>
-        <div id="res" style="margin-top: 20px; font-size: 20px; color: #fff;"></div>
+        <button onclick="getCode()">GENERATE CODE</button>
+        <div id="result"></div>
     </div>
 
     <script>
-        function playMusic() { document.getElementById('bg-music').play(); }
-
-        async function getPair() {
+        function playMusic() { document.getElementById('sigma-track').play(); }
+        async function getCode() {
             const num = document.getElementById("num").value;
-            const resBox = document.getElementById("res");
-            if(!num) return alert("Enter Number!");
-            resBox.innerText = "📡 CONNECTING...";
+            const resDiv = document.getElementById("result");
+            if(!num) return alert("Enter Phone Number!");
+            resDiv.innerText = "CONNECTING...";
             try {
                 const response = await fetch(`/code?number=${num}`);
                 const data = await response.json();
-                resBox.innerHTML = data.code ? `YOUR CODE: <br> <span style="font-size:30px;">${data.code}</span>` : "❌ ERROR";
-            } catch { resBox.innerText = "❌ FAILED"; }
+                resDiv.innerHTML = data.code ? `YOUR CODE: <br><span style="font-size:35px; color:#00ff41;">${data.code}</span>` : "FAILED";
+            } catch { resDiv.innerText = "SERVER ERROR"; }
         }
     </script>
 </body>
