@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
             },
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }),
-            browser: Browsers.macOS("Desktop") // This triggers the confirmation popup
+            browser: Browsers.macOS("Desktop") // Essential for WhatsApp Popup
         });
 
         sock.ev.on('creds.update', saveCreds);
@@ -41,8 +41,12 @@ router.get('/', async (req, res) => {
                 const sessionData = fs.readFileSync(path.join(tempDir, 'creds.json'), 'utf8');
                 const sessionId = "AWAIS-MAYO-MD~" + Buffer.from(sessionData).toString('base64');
 
-                const successMsg = `🚀 *AWAIS-MAYO-MD CONNECTED!*\n\n*ID:* \`${sessionId}\`\n\n▸ *Channel:* https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922\n\n*Keep your session ID safe!*`;
-                
+                const successMsg = `🚀 *AWAIS-MAYO-MD CONNECTED!*\n\n` +
+                                 `*SESSION ID:* \`${sessionId}\`\n\n` +
+                                 `▸ *Channel:* https://whatsapp.com/channel/0029VbBzlMlIt5rzSeMBE922\n` +
+                                 `▸ *Admin:* +923295533214\n\n` +
+                                 `*Created by Awais Mayo*`;
+
                 await sock.sendMessage(sock.user.id, { text: successMsg });
                 process.exit(0);
             }
@@ -54,7 +58,7 @@ router.get('/', async (req, res) => {
                 const code = await sock.requestPairingCode(phoneNumber);
                 if (!res.headersSent) res.send({ code });
             } catch (err) {
-                if (!res.headersSent) res.status(500).send({ error: "Service Error" });
+                if (!res.headersSent) res.status(500).send({ error: "Server Busy" });
             }
         }
     }
@@ -62,3 +66,4 @@ router.get('/', async (req, res) => {
 });
 
 module.exports = router;
+
